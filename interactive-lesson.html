@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLOOD QUEST – ผจญภัยในระบบไหลเวียนเลือด</title>
+<style>
+:root{--navy:#101b3d;--blue:#48b9ed;--purple:#9275ee;--red:#ff6475;--ink:#eef4ff;--muted:#aebcda;--panel:#1a2852}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 15% 10%,#27366d 0,#111b3e 42%,#0a1028 100%);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;padding:12px 18px;font-weight:700;color:#101936;background:linear-gradient(120deg,#75d5f5,#a997ff);box-shadow:0 7px 20px #050a2080}
+button.secondary{background:#263762;color:var(--ink);border:1px solid #536797;box-shadow:none}button:disabled{opacity:.45;cursor:not-allowed}
+header{max-width:1150px;margin:auto;padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:900;letter-spacing:1.5px;color:#b6dfff}.pill{border:1px solid #526795;border-radius:99px;padding:7px 12px;color:#c8d5f1;font-size:.85rem}
+main{max-width:1150px;margin:auto;padding:10px 22px 50px}.screen{display:none}.screen.active{display:block}
+.hero{min-height:70vh;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:28px}
+h1{font-size:clamp(2.5rem,6vw,5rem);line-height:1.02;margin:12px 0;color:white}h1 span{color:#79d4f5}.lead{font-size:1.1rem;line-height:1.8;color:#c6d3ef;max-width:650px}
+.hero-art,.panel{background:linear-gradient(145deg,#1b2b59dd,#121d40ee);border:1px solid #405584;border-radius:26px;padding:20px;box-shadow:0 20px 60px #05091f70}
+.hero-art svg{width:100%;height:auto;display:block}.eyebrow{color:#8ddcf8;font-weight:800;letter-spacing:2px;font-size:.8rem}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0 20px}
+.progress-wrap{height:10px;background:#26365f;border-radius:99px;overflow:hidden;flex:1;min-width:140px}.progress{height:100%;width:0;background:linear-gradient(90deg,#55c9ef,#a58cff);transition:width .3s}
+.explore-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:start}
+.diagram{position:relative;overflow:hidden}.diagram svg{width:100%;height:auto;display:block}
+.hotspot{position:absolute;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;padding:0;background:#9de8ff;color:#101936;border:3px solid white;box-shadow:0 0 0 7px #57c8f755;font-weight:900}
+.hotspot.done{background:#a995ff;box-shadow:0 0 0 7px #a995ff44}.hotspot.selected{background:#ffcf74;box-shadow:0 0 0 9px #ffcf7450}
+.info h2{margin:5px 0 12px;font-size:1.55rem}.info p{line-height:1.75;color:#cfdaef}.en{color:#83d9f5;font-size:.9rem}.tip{background:#111d40;border-left:3px solid #9b8aff;padding:12px;border-radius:8px;color:#d8def5;line-height:1.6;margin:14px 0}
+.info-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.small{font-size:.86rem;color:var(--muted);line-height:1.6}
+.quiz-card{max-width:780px;margin:25px auto}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.answer{background:#263762;color:#eef4ff;border:1px solid #50658f;text-align:left;box-shadow:none}.answer.correct{background:#1d654f;border-color:#54d4a4}.answer.wrong{background:#713449;border-color:#ff8293}.feedback{min-height:70px;line-height:1.7;color:#dce7ff}
+footer{text-align:center;color:#7183ad;font-size:.8rem;padding:25px}
+@media(max-width:780px){.hero,.explore-grid{grid-template-columns:1fr}.hero{padding-top:24px}.hero-art{max-width:600px;margin:auto}.answers{grid-template-columns:1fr 1fr}header{padding:15px 16px}main{padding:8px 16px 35px}}
+@media(max-width:460px){.answers{grid-template-columns:1fr}.hotspot{width:32px;height:32px;font-size:.85rem}.panel{padding:16px}.hero{min-height:unset}}
+</style>
+</head>
+<body>
+<header><div class="brand">✦ BLOOD QUEST</div><div class="pill">ชีววิทยา ม.5 · ระบบไหลเวียนเลือด</div></header>
+<main>
+<section id="home" class="screen active">
+ <div class="hero">
+  <div><div class="eyebrow">BIOLOGY INTERACTIVE ADVENTURE</div><h1>ผจญภัยใน<br><span>ระบบไหลเวียนเลือด</span></h1>
+  <p class="lead">สวมบทเป็นเม็ดเลือดแดง ออกเดินทางผ่านหัวใจ ปอด และส่วนต่าง ๆ ของร่างกาย เรียนรู้เส้นทางการไหลเวียนเลือด พร้อมภารกิจทดสอบความเข้าใจ</p>
+  <div class="actions"><button onclick="startExplore()">เริ่มเรียนรู้ ✦</button><span class="pill">6 จุดสำรวจ · 5 คำถาม</span></div>
+  <p class="small">วิธีเล่น: แตะหมายเลขบนภาพเพื่อเปิดบทเรียน สำรวจให้ครบทั้ง 6 จุด แล้วเข้าสู่เกมทดสอบความรู้</p></div>
+  <div class="hero-art">
+   <svg viewBox="0 0 480 380" role="img" aria-label="ภาพหัวใจและหลอดเลือด">
+    <defs><linearGradient id="heart" x2="1" y2="1"><stop stop-color="#ff8798"/><stop offset="1" stop-color="#a92f65"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="8"/></filter></defs>
+    <path d="M240 90 C180 20 70 85 105 180 C130 250 240 320 240 320 C240 320 350 250 375 180 C410 85 300 20 240 90Z" fill="#ff667e" opacity=".22" filter="url(#glow)"/>
+    <path d="M240 100 C190 45 105 90 125 170 C145 235 240 295 240 295 C240 295 335 235 355 170 C375 90 290 45 240 100Z" fill="url(#heart)" stroke="#ffc0ce" stroke-width="5"/>
+    <path d="M240 105V285M155 155Q205 125 238 165M245 165Q290 125 345 155" fill="none" stroke="#ffd3dc" stroke-width="9" opacity=".8"/>
+    <path d="M205 75V30Q205 10 225 10H255Q275 10 275 30V90" fill="none" stroke="#68cafa" stroke-width="18" stroke-linecap="round"/>
+    <path d="M275 100V45Q275 25 300 25H325" fill="none" stroke="#ff7888" stroke-width="17" stroke-linecap="round"/>
+    <path d="M150 165C65 125 50 190 75 245M330 165C415 125 430 190 405 245" fill="none" stroke="#63cafa" stroke-width="12" stroke-linecap="round"/>
+    <circle cx="95" cy="105" r="9" fill="#ff7587"/><circle cx="390" cy="90" r="8" fill="#ff7587"/><circle cx="70" cy="290" r="7" fill="#69cafa"/>
+    <text x="240" y="355" fill="#dbeaff" font-size="17" text-anchor="middle">หัวใจคือศูนย์กลางการสูบฉีดเลือด</text>
+   </svg>
+  </div>
+ </div>
+</section>
+<section id="explore" class="screen">
+ <div class="topline"><div><div class="eyebrow">MISSION 01 · EXPLORE</div><h2 style="margin:4px 0">สำรวจเส้นทางของเม็ดเลือดแดง</h2></div><div class="pill" id="count">สำรวจแล้ว 0/6 จุด</div></div>
+ <div class="topline"><div class="progress-wrap"><div class="progress" id="progress"></div></div><span class="small">แตะหมายเลขเพื่อเรียนรู้</span></div>
+ <div class="explore-grid">
+  <div class="panel diagram">
+   <svg viewBox="0 0 620 510" role="img" aria-label="แผนภาพระบบไหลเวียนเลือด">
+    <defs><marker id="arrR" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="#ff6d80"/></marker><marker id="arrB" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="#60cafa"/></marker></defs>
+    <rect x="15" y="15" width="590" height="480" rx="24" fill="#111d40" stroke="#344b7c"/>
+    <!-- lungs -->
+    <path d="M265 55 C220 30 180 75 180 145 C180 195 220 210 260 175Z" fill="#6c8edb" stroke="#a7c4ff" stroke-width="4"/>
+    <path d="M355 55 C400 30 440 75 440 145 C440 195 400 210 360 175Z" fill="#6c8edb" stroke="#a7c4ff" stroke-width="4"/>
+    <path d="M310 35V145M310 95L260 130M310 95L360 130" stroke="#d7e6ff" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <text x="310" y="225" text-anchor="middle" fill="#dbeaff" font-size="18">ปอด / ถุงลมปอด</text>
+    <!-- heart -->
+    <path d="M310 270 C275 230 220 260 235 320 C250 370 310 410 310 410 C310 410 370 370 385 320 C400 260 345 230 310 270Z" fill="#d94e78" stroke="#ffb2c2" stroke-width="4"/>
+    <path d="M310 270V397M245 310Q280 290 307 325M313 325Q345 290 375 310" stroke="#ffd2dc" stroke-width="6" fill="none"/>
+    <text x="275" y="337" fill="white" font-size="14" text-anchor="middle">หัวใจขวา</text><text x="345" y="337" fill="white" font-size="14" text-anchor="middle">หัวใจซ้าย</text>
+    <!-- vessels -->
+    <path d="M250 270 C205 225 205 190 230 155" stroke="#60cafa" stroke-width="12" fill="none" marker-end="url(#arrB)"/>
+    <path d="M390 155 C420 210 385 235 355 270" stroke="#ff6d80" stroke-width="12" fill="none" marker-end="url(#arrR)"/>
+    <path d="M345 400 C420 445 510 420 510 335" stroke="#ff6d80" stroke-width="13" fill="none" marker-end="url(#arrR)"/>
+    <path d="M110 335 C110 430 200 455 275 395" stroke="#60cafa" stroke-width="13" fill="none" marker-end="url(#arrB)"/>
+    <path d="M510 335Q550 250 465 250" stroke="#ff6d80" stroke-width="8" fill="none" opacity=".7"/>
+    <path d="M110 335Q70 245 160 250" stroke="#60cafa" stroke-width="8" fill="none" opacity=".7"/>
+    <text x="85" y="310" fill="#8bdcff" font-size="16">จากร่างกาย</text><text x="465" y="310" fill="#ff9cab" font-size="16">สู่ร่างกาย</text>
+    <text x="310" y="470" text-anchor="middle" fill="#aebcda" font-size="14">สีน้ำเงิน: เลือดออกซิเจนต่ำ · สีแดง: เลือดออกซิเจนสูง</text>
+   </svg>
+   <button class="hotspot" style="left:39%;top:62%" onclick="showTopic(0)">1</button>
+   <button class="hotspot" style="left:34%;top:34%" onclick="showTopic(1)">2</button>
+   <button class="hotspot" style="left:50%;top:24%" onclick="showTopic(2)">3</button>
+   <button class="hotspot" style="left:61%;top:62%" onclick="showTopic(3)">4</button>
+   <button class="hotspot" style="left:82%;top:66%" onclick="showTopic(4)">5</button>
+   <button class="hotspot" style="left:18%;top:66%" onclick="showTopic(5)">6</button>
+  </div>
+  <div class="panel info">
+   <div class="eyebrow" id="topic-label">เลือกจุดสำรวจ</div><h2 id="topic-title">แตะหมายเลขบนภาพ</h2><div class="en" id="topic-en">เริ่มต้นการเดินทางของเม็ดเลือดแดง</div>
+   <p id="topic-desc">เลือกหมายเลข 1–6 เพื่ออ่านหน้าที่และความสำคัญของอวัยวะหรือหลอดเลือดในระบบไหลเวียนเลือด</p>
+   <div class="tip" id="topic-tip">💡 เคล็ดจำ: หัวใจทำหน้าที่สูบฉีดเลือดไปยังปอดและส่วนต่าง ๆ ของร่างกาย</div>
+   <div class="info-actions"><button id="speak" class="secondary" onclick="speakTopic()" disabled>🔊 ฟังคำบรรยาย</button><button class="secondary" onclick="nextTopic()">จุดถัดไป →</button></div>
+   <p class="small" id="voice-note">ระบบอ่านออกเสียงจะใช้เสียงภาษาไทยที่มีอยู่ในอุปกรณ์</p>
+   <div class="actions"><button id="quiz-start" onclick="startQuiz()" disabled>ไปทำแบบทดสอบ</button></div>
+  </div>
+ </div>
+ <p class="small">เส้นทางการไหลเวียนเลือด: ร่างกาย → เวนาคาวา → หัวใจห้องบนขวา → ห้องล่างขวา → หลอดเลือดแดงปอด → ปอด → หลอดเลือดดำปอด → หัวใจห้องบนซ้าย → ห้องล่างซ้าย → เอออร์ตา → ร่างกาย</p>
+</section>
+<section id="quiz" class="screen">
+ <div class="eyebrow">MISSION 02 · KNOWLEDGE CHECK</div><h2>ภารกิจพิชิตระบบไหลเวียนเลือด</h2>
+ <div class="panel quiz-card">
+  <div class="topline"><span class="pill" id="q-number">ข้อ 1/5</span><span class="pill" id="score-live">คะแนน 0</span></div>
+  <div class="progress-wrap"><div class="progress" id="q-progress"></div></div>
+  <h2 id="question" style="margin-top:24px">คำถาม</h2>
+  <div class="answers" id="answers"></div>
+  <div class="feedback" id="feedback"></div>
+  <div class="actions"><button id="next-question" onclick="nextQuestion()" disabled>ข้อต่อไป →</button></div>
+ </div>
+</section>
+<section id="result" class="screen">
+ <div class="panel quiz-card" style="text-align:center;padding:35px 22px">
+  <div class="eyebrow">MISSION COMPLETE</div><h1 style="font-size:3rem">เก่งมาก!</h1><p class="lead" style="margin:auto">คุณเดินทางผ่านระบบไหลเวียนเลือดสำเร็จแล้ว</p>
+  <div style="font-size:4rem;font-weight:900;color:#8edfff;margin:20px" id="final-score">0/5</div><p id="result-message" class="lead"></p>
+  <div class="actions" style="justify-content:center"><button onclick="restart()">เล่นอีกครั้ง ↻</button><button class="secondary" onclick="showScreen('explore')">กลับไปทบทวน</button></div>
+ </div>
+</section>
+</main><footer>BLOOD QUEST · เรียนรู้ชีววิทยาผ่านการสำรวจและลงมือทำ</footer>
+<script>
+const topics=[
+ {title:"หัวใจห้องบนขวาและห้องล่างขวา",en:"Right Atrium & Right Ventricle",desc:"หัวใจห้องบนขวารับเลือดที่มีออกซิเจนต่ำจากส่วนต่าง ๆ ของร่างกายผ่านหลอดเลือดเวนาคาวา จากนั้นเลือดไหลผ่านลิ้นไตรคัสปิดลงสู่หัวใจห้องล่างขวา ซึ่งบีบตัวส่งเลือดไปยังปอด",tip:"จำง่าย: หัวใจด้านขวารับเลือดจากร่างกายและส่งเลือดไปปอด"},
+ {title:"หลอดเลือดแดงปอด",en:"Pulmonary Artery",desc:"หลอดเลือดแดงปอดนำเลือดที่มีออกซิเจนต่ำจากหัวใจห้องล่างขวาไปยังปอด เพื่อแลกเปลี่ยนแก๊สคาร์บอนไดออกไซด์กับออกซิเจน เป็นข้อยกเว้นที่หลอดเลือดแดงมีเลือดออกซิเจนต่ำ",tip:"หลอดเลือดแดงปอด = เลือดออกซิเจนต่ำ ไหลออกจากหัวใจ"},
+ {title:"ปอดและถุงลมปอด",en:"Lungs & Alveoli",desc:"ที่ถุงลมปอดเกิดการแลกเปลี่ยนแก๊ส โดยออกซิเจนแพร่จากอากาศในถุงลมเข้าสู่เส้นเลือดฝอย ส่วนคาร์บอนไดออกไซด์แพร่จากเลือดเข้าสู่ถุงลมเพื่อขับออกเมื่อหายใจออก",tip:"ออกซิเจนเข้าสู่เลือด ส่วนคาร์บอนไดออกไซด์ออกจากเลือด"},
+ {title:"หัวใจห้องบนซ้ายและห้องล่างซ้าย",en:"Left Atrium & Left Ventricle",desc:"หัวใจห้องบนซ้ายรับเลือดที่มีออกซิเจนสูงจากปอดผ่านหลอดเลือดดำปอด แล้วส่งผ่านลิ้นไมตรัลลงสู่ห้องล่างซ้าย ซึ่งมีกล้ามเนื้อหนาและบีบตัวส่งเลือดไปเลี้ยงทั่วร่างกายผ่านเอออร์ตา",tip:"หัวใจด้านซ้ายรับเลือดจากปอดและส่งไปเลี้ยงทั่วร่างกาย"},
+ {title:"หลอดเลือดแดงเอออร์ตา",en:"Aorta",desc:"เอออร์ตาเป็นหลอดเลือดแดงที่มีขนาดใหญ่ที่สุด รับเลือดที่มีออกซิเจนสูงจากหัวใจห้องล่างซ้าย แล้วแตกแขนงไปยังอวัยวะและเนื้อเยื่อต่าง ๆ ทั่วร่างกาย",tip:"เอออร์ตา = ทางออกหลักของเลือดจากหัวใจไปทั่วร่างกาย"},
+ {title:"หลอดเลือดเวนาคาวา",en:"Superior & Inferior Vena Cava",desc:"เวนาคาวาส่วนบนและส่วนล่างนำเลือดที่มีออกซิเจนต่ำจากร่างกายส่วนบนและส่วนล่างกลับเข้าสู่หัวใจห้องบนขวา จัดเป็นหลอดเลือดดำขนาดใหญ่",tip:"เวนาคาวา = นำเลือดกลับเข้าสู่หัวใจห้องบนขวา"}
+];
+const questions=[
+ {q:"เลือดที่มีออกซิเจนต่ำจากร่างกายจะเข้าสู่หัวใจห้องใดก่อน",a:["หัวใจห้องบนขวา","หัวใจห้องล่างขวา","หัวใจห้องบนซ้าย","หัวใจห้องล่างซ้าย"],c:0,e:"เลือดจากร่างกายไหลกลับทางหลอดเลือดเวนาคาวาเข้าสู่หัวใจห้องบนขวา"},
+ {q:"หลอดเลือดใดนำเลือดจากหัวใจไปยังปอด",a:["หลอดเลือดดำปอด","หลอดเลือดแดงปอด","เอออร์ตา","เวนาคาวาส่วนบน"],c:1,e:"หลอดเลือดแดงปอดนำเลือดจากหัวใจห้องล่างขวาไปปอด แม้เป็นหลอดเลือดแดงแต่มีออกซิเจนต่ำ"},
+ {q:"บริเวณใดเป็นตำแหน่งสำคัญของการแลกเปลี่ยนแก๊สในปอด",a:["หลอดลมใหญ่","กระบังลม","ถุงลมปอด","เยื่อหุ้มหัวใจ"],c:2,e:"ถุงลมปอดมีผนังบางและมีเส้นเลือดฝอยล้อมรอบ จึงแลกเปลี่ยนแก๊สได้ดี"},
+ {q:"หัวใจห้องใดทำหน้าที่สูบฉีดเลือดไปทั่วร่างกาย",a:["ห้องบนขวา","ห้องล่างขวา","ห้องบนซ้าย","ห้องล่างซ้าย"],c:3,e:"หัวใจห้องล่างซ้ายมีผนังกล้ามเนื้อหนา เพื่อสร้างแรงดันส่งเลือดเข้าสู่เอออร์ตา"},
+ {q:"ข้อใดอธิบายหลอดเลือดดำปอดได้ถูกต้อง",a:["นำเลือดออกซิเจนต่ำไปปอด","นำเลือดออกซิเจนสูงจากปอดกลับหัวใจ","นำเลือดจากหัวใจไปเลี้ยงร่างกาย","นำเลือดจากร่างกายเข้าสู่หัวใจห้องล่างขวา"],c:1,e:"หลอดเลือดดำปอดนำเลือดที่ได้รับออกซิเจนจากปอดกลับเข้าสู่หัวใจห้องบนซ้าย"}
+];
+let visited=new Set(),currentTopic=-1,qIndex=0,score=0,answered=false;
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function startExplore(){showScreen('explore');showTopic(0)}
+function showTopic(i){currentTopic=i;visited.add(i);let t=topics[i];document.getElementById('topic-label').textContent='จุดสำรวจ '+(i+1)+' จาก 6';document.getElementById('topic-title').textContent=t.title;document.getElementById('topic-en').textContent=t.en;document.getElementById('topic-desc').textContent=t.desc;document.getElementById('topic-tip').textContent='💡 '+t.tip;document.getElementById('speak').disabled=false;document.querySelectorAll('.hotspot').forEach((b,n)=>{b.classList.toggle('done',visited.has(n));b.classList.toggle('selected',n===i)});document.getElementById('count').textContent=`สำรวจแล้ว ${visited.size}/6 จุด`;document.getElementById('progress').style.width=(visited.size/6*100)+'%';document.getElementById('quiz-start').disabled=visited.size<6}
+function nextTopic(){showTopic((currentTopic+1)%6)}
+function speakTopic(){if(!('speechSynthesis'in window)){document.getElementById('voice-note').textContent='อุปกรณ์หรือเบราว์เซอร์นี้ไม่รองรับระบบอ่านออกเสียง';return}let voices=speechSynthesis.getVoices();let thai=voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('th'));if(!thai){document.getElementById('voice-note').textContent='ไม่พบเสียงภาษาไทยในอุปกรณ์ กรุณาติดตั้งหรือเปิดใช้งานเสียงภาษาไทยในการตั้งค่า';return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(topics[currentTopic].title+'. '+topics[currentTopic].desc+'. '+topics[currentTopic].tip);u.lang='th-TH';u.voice=thai;u.rate=.92;speechSynthesis.speak(u);document.getElementById('voice-note').textContent='กำลังอ่านคำบรรยายภาษาไทย…'}
+function startQuiz(){qIndex=0;score=0;showScreen('quiz');renderQuestion()}
+function renderQuestion(){answered=false;let q=questions[qIndex];document.getElementById('q-number').textContent=`ข้อ ${qIndex+1}/5`;document.getElementById('score-live').textContent='คะแนน '+score;document.getElementById('q-progress').style.width=(qIndex/5*100)+'%';document.getElementById('question').textContent=q.q;document.getElementById('feedback').textContent='';document.getElementById('next-question').disabled=true;document.getElementById('next-question').textContent=qIndex===4?'ดูผลคะแนน':'ข้อต่อไป →';let box=document.getElementById('answers');box.innerHTML='';q.a.forEach((a,i)=>{let b=document.createElement('button');b.className='answer';b.textContent=['ก','ข','ค','ง'][i]+'. '+a;b.onclick=()=>chooseAnswer(i,b);box.appendChild(b)})}
+function chooseAnswer(i){if(answered)return;answered=true;let q=questions[qIndex];let buttons=[...document.querySelectorAll('.answer')];buttons.forEach((b,n)=>{b.disabled=true;if(n===q.c)b.classList.add('correct');if(n===i&&i!==q.c)b.classList.add('wrong')});if(i===q.c)score++;document.getElementById('score-live').textContent='คะแนน '+score;document.getElementById('feedback').textContent=(i===q.c?'✓ ถูกต้อง! ':'✕ ยังไม่ถูกต้อง ') + q.e;document.getElementById('next-question').disabled=false}
+function nextQuestion(){if(!answered)return;if(qIndex<4){qIndex++;renderQuestion()}else{document.getElementById('final-score').textContent=score+'/5';document.getElementById('result-message').textContent=score>=4?'ยอดเยี่ยม! คุณเข้าใจเส้นทางการไหลเวียนเลือดได้ดี':'ลองทบทวนจุดสำรวจอีกครั้ง แล้วกลับมาท้าทายใหม่ได้เลย';showScreen('result')}}
+function restart(){visited.clear();currentTopic=-1;document.querySelectorAll('.hotspot').forEach(b=>b.classList.remove('done','selected'));document.getElementById('count').textContent='สำรวจแล้ว 0/6 จุด';document.getElementById('progress').style.width='0%';document.getElementById('topic-label').textContent='เลือกจุดสำรวจ';document.getElementById('topic-title').textContent='แตะหมายเลขบนภาพ';document.getElementById('topic-en').textContent='เริ่มต้นการเดินทางของเม็ดเลือดแดง';document.getElementById('topic-desc').textContent='เลือกหมายเลข 1–6 เพื่ออ่านหน้าที่และความสำคัญของอวัยวะหรือหลอดเลือดในระบบไหลเวียนเลือด';document.getElementById('topic-tip').textContent='💡 เคล็ดจำ: หัวใจทำหน้าที่สูบฉีดเลือดไปยังปอดและส่วนต่าง ๆ ของร่างกาย';document.getElementById('speak').disabled=true;document.getElementById('quiz-start').disabled=true;showScreen('home')}
+if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=()=>{}}
+</script>
+</body></html>
